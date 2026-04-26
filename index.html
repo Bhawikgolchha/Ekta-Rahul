@@ -9,6 +9,8 @@
 
   <link rel="preload" as="image" href="images/hero-couple.png" fetchpriority="high" />
   <link rel="preload" as="image" href="logo.png" />
+  <link rel="preload" as="image" href="images/event-mayra.jpeg" />
+  <link rel="preload" as="image" href="images/dress-mayra.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -219,12 +221,15 @@
       transform: translateX(-50%);
       width: min(95vw, 1400px);
       height: auto;
-      opacity: 0.28;
-      mix-blend-mode: screen;
+      opacity: 0;                     /* fades in via .loaded */
+      mix-blend-mode: lighten;
       z-index: 1;
       pointer-events: none;
-      filter: saturate(1.1) contrast(1.05);
+      filter: saturate(1.15) contrast(1.05);
+      transition: opacity 900ms ease-out 200ms;
+      will-change: opacity, transform;
     }
+    .hero-watercolor.loaded { opacity: 0.42; }
     .hero-content {
       position: relative;
       z-index: 5;
@@ -1168,11 +1173,11 @@
           </div>
           <p class="event-desc">A tender family ritual of blessings and heirlooms — where her maternal home sends love forward into the new one.</p>
         </div>
-        <div class="event-img"><img src="images/event-mayra.png" alt="Watercolor illustration of Mayra ceremony" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-mayra.jpeg" alt="Watercolor illustration of Mayra ceremony" loading="eager" decoding="async" width="800" height="800" /></div>
       </div>
 
       <div class="event-row right reveal">
-        <div class="event-img"><img src="images/event-mehendi.png" alt="Watercolor illustration of Mehendi night" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-mehendi.png" alt="Watercolor illustration of Mehendi night" loading="lazy" decoding="async" width="800" height="800" /></div>
         <div class="event-card">
           <h3 class="event-title">Mehendi &amp; Musical Night</h3>
           <div class="event-meta">
@@ -1192,11 +1197,11 @@
           </div>
           <p class="event-desc">A joyful morning of silks, kolam patterns, filter-coffee fragrance and banana-leaf feasting.</p>
         </div>
-        <div class="event-img"><img src="images/event-south-indian.png" alt="Watercolor of South Indian Carnival" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-south-indian.png" alt="Watercolor of South Indian Carnival" loading="lazy" decoding="async" width="800" height="800" /></div>
       </div>
 
       <div class="event-row right reveal">
-        <div class="event-img"><img src="images/event-sangeet.png" alt="Watercolor of Sangeet evening" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-sangeet.png" alt="Watercolor of Sangeet evening" loading="lazy" decoding="async" width="800" height="800" /></div>
         <div class="event-card">
           <h3 class="event-title">Sangeet Evening</h3>
           <div class="event-meta">
@@ -1216,11 +1221,11 @@
           </div>
           <p class="event-desc">Families meet, garlands are exchanged, and seven sacred rounds are taken around the fire — the moment itself.</p>
         </div>
-        <div class="event-img"><img src="images/event-milni-phera.png" alt="Watercolor of Milni and Phera" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-milni-phera.jpeg" alt="Watercolor of Milni and Phera" loading="lazy" decoding="async" width="800" height="800" /></div>
       </div>
 
       <div class="event-row right reveal">
-        <div class="event-img"><img src="images/event-reception.png" alt="Watercolor of Reception evening" loading="lazy" /></div>
+        <div class="event-img"><img src="images/event-reception.png" alt="Watercolor of Reception evening" loading="lazy" decoding="async" width="800" height="800" /></div>
         <div class="event-card">
           <h3 class="event-title">Reception Evening</h3>
           <div class="event-meta">
@@ -1243,37 +1248,37 @@
 
     <div class="dress-grid" id="dress-grid">
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-mayra.png" alt="Dress inspiration for Mayra" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-mayra.png" alt="Dress inspiration for Mayra" loading="eager" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Fri · 01 May · 4:00 PM</p>
         <h3 class="dress-event">Mayra Evening</h3>
         <p class="dress-code">Traditional</p>
       </article>
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-mehendi.png" alt="Dress inspiration for Mehendi" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-mehendi.png" alt="Dress inspiration for Mehendi" loading="lazy" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Fri · 01 May · 7:00 PM</p>
         <h3 class="dress-event">Mehendi &amp; Musical</h3>
         <p class="dress-code">Comfortable Wear</p>
       </article>
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-south-indian.png" alt="Dress inspiration for South Indian Carnival" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-south-indian.png" alt="Dress inspiration for South Indian Carnival" loading="lazy" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Sat · 02 May · 10:00 AM</p>
         <h3 class="dress-event">South Indian Carnival</h3>
         <p class="dress-code">South Indian Wear</p>
       </article>
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-sangeet.png" alt="Dress inspiration for Sangeet" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-sangeet.png" alt="Dress inspiration for Sangeet" loading="lazy" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Sat · 02 May · 7:00 PM</p>
         <h3 class="dress-event">Sangeet Evening</h3>
         <p class="dress-code">Indo-Western</p>
       </article>
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-milni-phera.png" alt="Dress inspiration for Milni and Phera" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-milni-phera.png" alt="Dress inspiration for Milni and Phera" loading="lazy" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Sun · 03 May · 10:30 AM</p>
         <h3 class="dress-event">Milni &amp; Phera</h3>
         <p class="dress-code">Indian Traditional</p>
       </article>
       <article class="dress-card reveal tilt">
-        <div class="dress-img"><img src="images/dress-reception.png" alt="Dress inspiration for Reception" loading="lazy" /></div>
+        <div class="dress-img"><img src="images/dress-reception.png" alt="Dress inspiration for Reception" loading="lazy" decoding="async" width="800" height="800" /></div>
         <p class="dress-date">Sun · 03 May · 7:00 PM</p>
         <h3 class="dress-event">Reception Evening</h3>
         <p class="dress-code">Suit / Blazer</p>
@@ -1340,16 +1345,6 @@
 
       <div class="faq-item reveal">
         <button class="faq-q" type="button" aria-expanded="false">
-          Can I bring a plus-one?
-          <svg class="faq-chev" aria-hidden="true"><use href="#chev"/></svg>
-        </button>
-        <div class="faq-a-wrap"><div class="faq-a">
-          Your invitation lists the names we've reserved seats for. If you'd love to bring someone extra, please message the families directly — we'll do our best to accommodate.
-        </div></div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-q" type="button" aria-expanded="false">
           Is there parking at the venue?
           <svg class="faq-chev" aria-hidden="true"><use href="#chev"/></svg>
         </button>
@@ -1365,16 +1360,6 @@
         </button>
         <div class="faq-a-wrap"><div class="faq-a">
           We have held rooms at two partner hotels in Ponneri and northern Chennai. A stay-and-shuttle detail is being shared with guests via WhatsApp — reach out to the families if you haven't received it yet.
-        </div></div>
-      </div>
-
-      <div class="faq-item reveal">
-        <button class="faq-q" type="button" aria-expanded="false">
-          Will the ceremonies have English explanations?
-          <svg class="faq-chev" aria-hidden="true"><use href="#chev"/></svg>
-        </button>
-        <div class="faq-a-wrap"><div class="faq-a">
-          Yes. Our priests will narrate each ritual in English alongside Sanskrit &amp; Tamil, and printed programmes will walk you through the symbolism of each step.
         </div></div>
       </div>
 
@@ -1398,10 +1383,14 @@
     <div class="footer-hash shimmer-text">#EkRahForever</div>
     <div class="footer-sub">1 — 3 May 2026 · Ponneri Gymkhana Club</div>
     <div class="footer-socials">
-      <a href="#" aria-label="Instagram" rel="noopener"><svg><use href="#ig"/></svg></a>
-      <a href="#" aria-label="WhatsApp"  rel="noopener"><svg><use href="#wa"/></svg></a>
+      <a href="https://www.instagram.com/ekrah_forever?igsh=MWdnbzZ6ZWZrMjFmdw%3D%3D"
+         target="_blank" aria-label="Instagram @ekrah_forever (opens new tab)"
+         rel="noopener noreferrer"><svg><use href="#ig"/></svg></a>
+      <a href="https://wa.me/919790891316?text=Hi%2C%20about%20the%20Ekta%20%26%20Rahul%20wedding%20%E2%80%94"
+         target="_blank" aria-label="WhatsApp +91 97908 91316 (opens new tab)"
+         rel="noopener noreferrer"><svg><use href="#wa"/></svg></a>
     </div>
-    <div class="footer-copy">With love, from the Ek &amp; Rah families · 2026</div>
+    <div class="footer-copy">Love from the Bothra &amp; Surana families · 2026</div>
   </footer>
 
   <!-- ============================================================
@@ -1858,6 +1847,24 @@
           w.style.maxHeight = w.scrollHeight + "px";
         });
       });
+    })();
+
+    /* --------------------------------------------------------------
+       Hero watercolor: fade in the moment the image is ready
+       (handles cached + just-loaded cases)
+       -------------------------------------------------------------- */
+    (function () {
+      var hw = document.querySelector(".hero-watercolor");
+      if (!hw) return;
+      var reveal = function () { hw.classList.add("loaded"); };
+      if (hw.complete && hw.naturalWidth > 0) {
+        reveal();
+      } else {
+        hw.addEventListener("load", reveal, { once: true });
+        hw.addEventListener("error", reveal, { once: true });
+        // safety net — never leave the hero blank
+        setTimeout(reveal, 1500);
+      }
     })();
 
     /* --------------------------------------------------------------
