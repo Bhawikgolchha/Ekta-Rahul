@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <radialGradient id="petal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd86b"/>
+      <stop offset="55%" stop-color="#f49a2a"/>
+      <stop offset="100%" stop-color="#c9530f"/>
+    </radialGradient>
+    <radialGradient id="leaf" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7fa55a"/>
+      <stop offset="100%" stop-color="#3d5a26"/>
+    </radialGradient>
+    <symbol id="marigold" viewBox="-50 -50 100 100">
+      <g>
+        <circle r="46" fill="url(#petal)" opacity="0.45"/>
+        <g fill="url(#petal)">
+          <circle r="18" cx="0" cy="-30"/>
+          <circle r="18" cx="28" cy="-15"/>
+          <circle r="18" cx="28" cy="15"/>
+          <circle r="18" cx="0" cy="30"/>
+          <circle r="18" cx="-28" cy="15"/>
+          <circle r="18" cx="-28" cy="-15"/>
+        </g>
+        <circle r="14" fill="#f6c54b"/>
+        <circle r="6" fill="#7a3a06"/>
+      </g>
+    </symbol>
+    <symbol id="leaf" viewBox="-30 -12 60 24">
+      <ellipse cx="0" cy="0" rx="28" ry="10" fill="url(#leaf)"/>
+    </symbol>
+  </defs>
+
+  <!-- soft inner vignette so portrait blends with frame -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="55%">
+    <stop offset="62%" stop-color="rgba(0,0,0,0)"/>
+    <stop offset="100%" stop-color="rgba(26,10,46,0.55)"/>
+  </radialGradient>
+  <rect width="1080" height="1080" fill="url(#vignette)"/>
+
+  <!-- 24 marigolds around the edge in a ring -->
+  <g id="ring">
+    <!-- positions on a 510-radius circle; cx,cy = 540,540 -->
+    <use href="#marigold" x="540" y="20" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="675" y="40" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="800" y="100" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="920" y="200" width="115" height="115" transform="translate(-57 -57)"/>
+    <use href="#marigold" x="1015" y="335" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="1050" y="490" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="1050" y="650" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="1015" y="800" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="920" y="935" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="800" y="1030" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="675" y="1090" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="540" y="1115" width="115" height="115" transform="translate(-57 -57)"/>
+    <use href="#marigold" x="405" y="1090" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="280" y="1030" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="160" y="935" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="65" y="800" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="30" y="650" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="30" y="490" width="115" height="115" transform="translate(-57 -57)"/>
+    <use href="#marigold" x="65" y="335" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="160" y="200" width="110" height="110" transform="translate(-55 -55)"/>
+    <use href="#marigold" x="280" y="100" width="120" height="120" transform="translate(-60 -60)"/>
+    <use href="#marigold" x="405" y="40" width="115" height="115" transform="translate(-57 -57)"/>
+  </g>
+
+  <!-- a few green leaves between flowers -->
+  <g opacity="0.85">
+    <use href="#leaf" x="610" y="80" width="80" height="32" transform="rotate(20 610 80)"/>
+    <use href="#leaf" x="980" y="430" width="80" height="32" transform="rotate(80 980 430)"/>
+    <use href="#leaf" x="610" y="1010" width="80" height="32" transform="rotate(-20 610 1010)"/>
+    <use href="#leaf" x="80" y="610" width="80" height="32" transform="rotate(100 80 610)"/>
+  </g>
+</svg>

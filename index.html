@@ -607,6 +607,37 @@
       color:var(--blush);
       -webkit-text-fill-color:var(--blush);
     }
+    /* paired name + parent-line layout (added) */
+    .names-wrap{
+      display:flex; align-items:center; justify-content:center;
+      gap:clamp(0.5rem, 3vw, 1.75rem);
+      flex-wrap:wrap;
+      margin:0.25rem 0 0.75rem;
+    }
+    .name-block{ display:flex; flex-direction:column; align-items:center; }
+    .names-wrap .names{ margin:0; line-height:1; }
+    .names-wrap > .amp{
+      font-family:var(--f-script); font-style:normal; font-weight:700;
+      font-size:clamp(2rem, 7vw, 5rem);
+      color:var(--blush); -webkit-text-fill-color:var(--blush);
+      line-height:1; align-self:center;
+      transform:translateY(-0.18em);
+    }
+    .parent-line{
+      font-family:var(--f-display); font-style:italic; font-weight:400;
+      font-size:clamp(0.78rem, 2.2vw, 1.05rem);
+      line-height:1.35;
+      margin:0.5rem 0 0;
+      color:var(--blush-l);
+      letter-spacing:0.02em;
+      text-align:center;
+      opacity:0.92;
+    }
+    @media (max-width:520px){
+      .names-wrap{ flex-direction:column; gap:0.35rem; }
+      .names-wrap > .amp{ font-size:2.4rem; transform:none; margin:0.05rem 0; }
+      .parent-line{ font-size:0.85rem; margin-top:0.35rem; }
+    }
     .hero-dates{
       font-family:var(--f-display); font-weight:400;
       font-size:clamp(1.1rem, 2.2vw, 1.6rem);
@@ -1280,6 +1311,179 @@
       .door.left .door-knob{ right:18px; }
       .door.right .door-knob{ left:18px; }
     }
+    /* ===== mobile-first pass: tighter density on small phones ===== */
+    @media (max-width: 430px){
+      #hero{ padding:2.6rem 0.85rem 3rem; }
+      .tagline{ font-size:clamp(1rem, 4.2vw, 1.2rem); }
+      .countdown{ gap:0.45rem; max-width:none; }
+      .ctd-tile{ padding:0.55rem 0.25rem 0.5rem; }
+      .ctd-tile .ctd-num,.ctd-tile .num{ font-size:clamp(1.4rem, 6.5vw, 2rem); }
+      .timeline-thread{ left:14px; }
+      .event-row{ grid-template-columns:46px 1fr; }
+      .event-row.left .event-img,.event-row.right .event-img{ width:clamp(160px, 70vw, 240px); }
+      .cf-card{ width:200px; height:320px; margin-left:-100px; margin-top:-160px; }
+      .footer-logo{ width:62px; height:auto; }
+      .knock-btn{ font-size:0.72rem; padding:0.75rem 1.6rem; }
+    }
+    /* iOS safe-area + small-phone niceties */
+    .intro-knock{ padding-bottom:env(safe-area-inset-bottom); }
+    body.intro-locked{ overscroll-behavior:none; }
+    a, button, .portrait, .event-card, .ctd-tile, .faq-q, .filter-card, .knock-btn, .cam-btn{
+      -webkit-tap-highlight-color:transparent;
+    }
+    /* ensure tap targets reach 44px on small screens */
+    @media (max-width: 430px){
+      .knock-btn, .cam-btn, .filter-card, .faq-q{ min-height:44px; }
+    }
+
+    /* ===== Wedding Filters section ===== */
+    #filters{
+      padding:clamp(3rem, 6vw, 5rem) 1rem;
+      text-align:center;
+      position:relative;
+    }
+    #filters .section-sub{
+      font-family:var(--f-display); font-style:italic;
+      color:var(--blush-l); opacity:0.85;
+      max-width:34ch; margin:0.5rem auto 0;
+      font-size:clamp(0.95rem, 2.2vw, 1.1rem);
+    }
+    .filter-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+      gap:clamp(0.6rem, 2vw, 1rem);
+      max-width:780px;
+      margin:1.75rem auto 0;
+    }
+    .filter-card{
+      border:1px solid rgba(201,168,76,0.25);
+      padding:0.6rem;
+      border-radius:14px;
+      background:rgba(255,255,255,0.04);
+      color:var(--ivory);
+      display:flex; flex-direction:column; align-items:center; gap:0.55rem;
+      cursor:pointer;
+      transition:transform 180ms var(--ease-out-quint), background 180ms ease, border-color 180ms ease;
+      font-family:var(--f-body); font-weight:500;
+    }
+    .filter-card:hover, .filter-card:focus-visible, .filter-card:active{
+      background:rgba(201,168,76,0.12);
+      border-color:rgba(201,168,76,0.55);
+      transform:translateY(-2px);
+    }
+    .filter-card .filter-thumb{
+      width:100%; aspect-ratio:1;
+      border-radius:10px;
+      background:linear-gradient(160deg, #2a1338 0%, #4a1838 100%);
+      position:relative; overflow:hidden;
+      display:grid; place-items:center;
+    }
+    .filter-card .filter-thumb img{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      pointer-events:none;
+    }
+    .filter-card .filter-thumb::after{
+      content:""; position:absolute; inset:0;
+      background:radial-gradient(circle at 50% 60%, rgba(255,224,180,0.25), transparent 55%);
+      pointer-events:none;
+    }
+    .filter-card span.filter-label{
+      font-size:0.85rem; letter-spacing:0.08em; text-transform:uppercase;
+      color:var(--gold-l);
+    }
+
+    /* ===== Camera modal ===== */
+    .cam-modal{
+      position:fixed; inset:0; z-index:1200;
+      background:#0a0414;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:calc(env(safe-area-inset-top) + 1rem) 1rem calc(env(safe-area-inset-bottom) + 1rem);
+      gap:0.85rem;
+    }
+    .cam-modal[hidden]{ display:none; }
+    .cam-title{
+      font-family:var(--f-display); font-style:italic; font-weight:500;
+      color:var(--gold-l);
+      margin:0;
+      font-size:clamp(1.2rem, 4vw, 1.6rem);
+    }
+    .cam-close{
+      position:absolute; top:0.75rem; right:0.85rem;
+      width:42px; height:42px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      color:#fff; font-size:1.7rem; line-height:1;
+      display:grid; place-items:center;
+    }
+    .cam-stage{
+      position:relative;
+      width:min(92vw, 78vh, 540px);
+      aspect-ratio:1;
+      border-radius:18px;
+      overflow:hidden;
+      background:#000;
+      box-shadow:var(--shadow-gold);
+    }
+    .cam-stage video,
+    .cam-stage canvas,
+    #cam-result{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+    }
+    .cam-stage video{ transform:scaleX(-1); }
+    #cam-overlay{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:contain;
+      pointer-events:none;
+      mix-blend-mode:normal;
+    }
+    .cam-controls{
+      display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center;
+      margin-top:0.25rem;
+    }
+    .cam-btn{
+      min-height:44px;
+      padding:0.7rem 1.25rem;
+      border-radius:999px;
+      border:0;
+      font-weight:600; letter-spacing:0.05em;
+      font-family:var(--f-body);
+      display:inline-flex; align-items:center; justify-content:center; gap:0.4rem;
+      cursor:pointer;
+      text-decoration:none;
+    }
+    .cam-btn.primary{
+      background:linear-gradient(135deg, var(--gold-d), var(--gold), var(--gold-h));
+      color:var(--plum);
+    }
+    .cam-btn.ghost{
+      background:transparent; color:var(--ivory);
+      border:1px solid rgba(255,255,255,0.3);
+    }
+    .cam-btn.highlight{
+      box-shadow:0 0 0 2px var(--gold-h), 0 0 24px rgba(255,224,102,0.45);
+    }
+    .cam-privacy{
+      color:rgba(255,255,255,0.55);
+      font-size:0.78rem;
+      margin:0;
+    }
+    .cam-error{
+      color:var(--blush);
+      font-size:0.85rem;
+      max-width:34ch;
+      margin:0;
+      text-align:center;
+    }
+    @media (max-width: 430px){
+      .cam-stage{ width:min(94vw, 70vh); }
+      .cam-btn{ padding:0.65rem 1rem; font-size:0.9rem; }
+    }
+
     :focus-visible{ outline:2px solid var(--gold-h); outline-offset:3px; border-radius:4px; }
   </style>
 </head>
@@ -1484,11 +1688,17 @@
         <div class="portrait"><img src="data:image/jpeg;base64,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" alt="Portrait of Rahul" /></div>
       </div>
 
-      <h1 class="names">
-        <span class="shimmer-text">Ekta</span>
-        <span class="amp">&amp;</span>
-        <span class="shimmer-text">Rahul</span>
-      </h1>
+      <div class="names-wrap">
+        <div class="name-block">
+          <h1 class="names"><span class="shimmer-text">Ekta</span></h1>
+          <p class="parent-line">D/o Manoj Kumar Bothra<br/>&amp; Vijaya Devi Bothra</p>
+        </div>
+        <span class="amp" aria-hidden="true">&amp;</span>
+        <div class="name-block">
+          <h1 class="names"><span class="shimmer-text">Rahul</span></h1>
+          <p class="parent-line">S/o Surendraji Surana<br/>&amp; Shobha Devi Surana</p>
+        </div>
+      </div>
 
       <div class="hero-dates">
         <sup>1ˢᵗ</sup> — <sup>3ʳᵈ</sup> May 2026
@@ -1657,6 +1867,60 @@
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       WEDDING FILTERS — snap a memory
+       ============================================================ -->
+  <section id="filters" aria-labelledby="filters-title">
+    <span class="section-eyebrow small-caps">Snap A Memory</span>
+    <h2 id="filters-title" class="section-title shimmer-text">Wedding Filters</h2>
+    <div class="divider-ornament"><svg width="18" height="18"><use href="#sparkle"/></svg></div>
+    <p class="section-sub">Pick a filter, smile, and share with <strong>#EkRahForever</strong>.</p>
+
+    <div class="filter-grid" id="filter-grid">
+      <button class="filter-card" type="button" data-overlay="images/filters/filter-marigold.svg" data-name="Marigold Frame">
+        <span class="filter-thumb"><img src="images/filters/filter-marigold.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="filter-label">Marigold</span>
+      </button>
+      <button class="filter-card" type="button" data-overlay="images/filters/filter-mehndi.svg" data-name="Mehndi Border">
+        <span class="filter-thumb"><img src="images/filters/filter-mehndi.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="filter-label">Mehndi</span>
+      </button>
+      <button class="filter-card" type="button" data-overlay="images/filters/filter-ekrah-banner.svg" data-name="#EkRahForever">
+        <span class="filter-thumb"><img src="images/filters/filter-ekrah-banner.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="filter-label">#EkRahForever</span>
+      </button>
+      <button class="filter-card" type="button" data-overlay="images/filters/filter-padharo.svg" data-name="Padharo Sa">
+        <span class="filter-thumb"><img src="images/filters/filter-padharo.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="filter-label">Padharo Sa</span>
+      </button>
+      <button class="filter-card" type="button" data-overlay="images/filters/filter-dhol-diya.svg" data-name="Dhol &amp; Diya">
+        <span class="filter-thumb"><img src="images/filters/filter-dhol-diya.svg" alt="" loading="lazy" decoding="async" /></span>
+        <span class="filter-label">Dhol &amp; Diya</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- camera modal (hidden by default) -->
+  <div class="cam-modal" id="cam-modal" role="dialog" aria-modal="true" aria-labelledby="cam-title" hidden>
+    <button class="cam-close" id="cam-close" type="button" aria-label="Close filter">×</button>
+    <h3 id="cam-title" class="cam-title">Filter</h3>
+    <div class="cam-stage">
+      <video id="cam-video" playsinline muted autoplay></video>
+      <img id="cam-overlay" alt="" />
+      <canvas id="cam-canvas" hidden></canvas>
+      <img id="cam-result" alt="Your photo with filter applied" hidden />
+    </div>
+    <p class="cam-error" id="cam-error" hidden></p>
+    <div class="cam-controls">
+      <button class="cam-btn primary" id="cam-shoot" type="button">📸 Capture</button>
+      <label class="cam-btn ghost" id="cam-upload-label" for="cam-upload">⬆️ Upload</label>
+      <input id="cam-upload" type="file" accept="image/*" capture="user" hidden />
+      <a id="cam-download" class="cam-btn primary" download="ekrah-memory.png" hidden>⬇️ Download</a>
+      <button class="cam-btn ghost" id="cam-retake" type="button" hidden>↺ Retake</button>
+    </div>
+    <p class="cam-privacy">Your photo never leaves your phone.</p>
+  </div>
 
   <!-- ============================================================
        VENUE
@@ -1861,6 +2125,164 @@
     });
     document.addEventListener('keydown', (e)=>{
       if((e.key==='Enter' || e.key===' ' || e.key==='Escape') && !opened) openDoors();
+    });
+  })();
+  </script>
+
+  <script>
+  /* ============================================================
+     WEDDING FILTERS — camera + overlay compositor
+     ============================================================ */
+  (function filters(){
+    const grid    = document.getElementById('filter-grid');
+    const modal   = document.getElementById('cam-modal');
+    if(!grid || !modal) return;
+    const video   = document.getElementById('cam-video');
+    const overlay = document.getElementById('cam-overlay');
+    const canvas  = document.getElementById('cam-canvas');
+    const result  = document.getElementById('cam-result');
+    const shoot   = document.getElementById('cam-shoot');
+    const upload  = document.getElementById('cam-upload');
+    const uploadL = document.getElementById('cam-upload-label');
+    const dl      = document.getElementById('cam-download');
+    const retake  = document.getElementById('cam-retake');
+    const closeBtn= document.getElementById('cam-close');
+    const titleEl = document.getElementById('cam-title');
+    const errEl   = document.getElementById('cam-error');
+    let stream = null;
+    let lastObjectUrl = null;
+
+    function setError(msg){
+      if(!msg){ errEl.hidden = true; errEl.textContent = ''; return; }
+      errEl.hidden = false; errEl.textContent = msg;
+    }
+    function highlightUpload(on){ uploadL.classList.toggle('highlight', !!on); }
+
+    function setMode(mode){
+      // 'capture' (live preview) or 'review' (after compose)
+      if(mode === 'capture'){
+        video.hidden = false;
+        result.hidden = true;
+        shoot.hidden = false;
+        retake.hidden = true;
+        dl.hidden = true;
+      } else {
+        video.hidden = true;
+        result.hidden = false;
+        shoot.hidden = true;
+        retake.hidden = false;
+        dl.hidden = false;
+      }
+    }
+
+    async function startCamera(){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        setError('Camera not supported on this browser. Please use Upload.');
+        shoot.hidden = true; highlightUpload(true);
+        return;
+      }
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({
+          video:{ facingMode:'user', width:{ ideal:1080 }, height:{ ideal:1080 } },
+          audio:false
+        });
+        video.srcObject = stream;
+        setError('');
+        shoot.hidden = false; highlightUpload(false);
+      }catch(err){
+        // permission denied or no camera available
+        shoot.hidden = true; highlightUpload(true);
+        setError('Camera blocked. Tap Upload to pick a photo from your gallery.');
+      }
+    }
+
+    function stopCamera(){
+      if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
+      video.srcObject = null;
+    }
+
+    function openModal(overlaySrc, name){
+      titleEl.textContent = name || 'Filter';
+      overlay.src = overlaySrc;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      setMode('capture');
+      startCamera();
+    }
+
+    function closeModal(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      stopCamera();
+      if(lastObjectUrl){ URL.revokeObjectURL(lastObjectUrl); lastObjectUrl = null; }
+      setError('');
+    }
+
+    function compose(sourceEl, sw, sh, mirror){
+      const size = 1080;
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0,0,size,size);
+      // cover-fit + optional mirror (selfie)
+      if(mirror){ ctx.translate(size, 0); ctx.scale(-1, 1); }
+      const scale = Math.max(size / sw, size / sh);
+      const dw = sw * scale, dh = sh * scale;
+      ctx.drawImage(sourceEl, (size - dw)/2, (size - dh)/2, dw, dh);
+      ctx.setTransform(1,0,0,1,0,0);
+      // overlay
+      const ov = new Image();
+      ov.crossOrigin = 'anonymous';
+      ov.onload = () => {
+        ctx.drawImage(ov, 0, 0, size, size);
+        try{
+          const url = canvas.toDataURL('image/png');
+          result.src = url;
+          dl.href = url;
+          setMode('review');
+        }catch(e){
+          setError('Could not export image. Try a different filter or browser.');
+        }
+      };
+      ov.onerror = () => setError('Filter overlay failed to load.');
+      ov.src = overlay.src;
+    }
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.filter-card');
+      if(!card) return;
+      openModal(card.dataset.overlay, card.dataset.name);
+    });
+
+    shoot.addEventListener('click', () => {
+      if(!video.videoWidth){
+        setError('Camera not ready yet. Give it a moment, or tap Upload.');
+        return;
+      }
+      compose(video, video.videoWidth, video.videoHeight, true);
+    });
+
+    upload.addEventListener('change', (e) => {
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      if(lastObjectUrl) URL.revokeObjectURL(lastObjectUrl);
+      lastObjectUrl = URL.createObjectURL(f);
+      const img = new Image();
+      img.onload = () => compose(img, img.naturalWidth, img.naturalHeight, false);
+      img.onerror = () => setError('Could not load that image. Pick a different one.');
+      img.src = lastObjectUrl;
+      // reset input so picking the same file twice still fires change
+      upload.value = '';
+    });
+
+    retake.addEventListener('click', () => {
+      setMode('capture');
+      if(!stream) startCamera();
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if(!modal.hidden && (e.key === 'Escape')) closeModal();
     });
   })();
   </script>
