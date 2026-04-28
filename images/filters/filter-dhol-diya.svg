@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="dholBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a14b1d"/>
+      <stop offset="100%" stop-color="#5a200a"/>
+    </linearGradient>
+    <radialGradient id="diyaFlame" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fff5c0"/>
+      <stop offset="40%" stop-color="#ffb244"/>
+      <stop offset="100%" stop-color="rgba(255,80,20,0)"/>
+    </radialGradient>
+    <linearGradient id="diyaBowl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c9a84c"/>
+      <stop offset="100%" stop-color="#5e3a10"/>
+    </linearGradient>
+    <radialGradient id="petalY" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd86b"/>
+      <stop offset="100%" stop-color="#c9530f"/>
+    </radialGradient>
+  </defs>
+
+  <!-- TOP-LEFT : marigold strand -->
+  <g>
+    <path d="M 0 80 C 80 40, 180 130, 260 70" fill="none" stroke="#3d5a26" stroke-width="3"/>
+    <g>
+      <circle cx="40"  cy="92"  r="22" fill="url(#petalY)"/>
+      <circle cx="40"  cy="92"  r="8"  fill="#7a3a06"/>
+      <circle cx="100" cy="74"  r="22" fill="url(#petalY)"/>
+      <circle cx="100" cy="74"  r="8"  fill="#7a3a06"/>
+      <circle cx="160" cy="100" r="22" fill="url(#petalY)"/>
+      <circle cx="160" cy="100" r="8"  fill="#7a3a06"/>
+      <circle cx="220" cy="86"  r="22" fill="url(#petalY)"/>
+      <circle cx="220" cy="86"  r="8"  fill="#7a3a06"/>
+    </g>
+  </g>
+
+  <!-- TOP-RIGHT : peacock feather -->
+  <g transform="translate(820 30) rotate(20)">
+    <path d="M 0 200 C 30 100, 100 50, 180 60 C 130 130, 80 180, 0 200 Z"
+          fill="#1c5a6a" opacity="0.85"/>
+    <path d="M 0 200 C 30 100, 100 50, 180 60"
+          fill="none" stroke="#2a8aa0" stroke-width="3"/>
+    <!-- eye -->
+    <ellipse cx="120" cy="100" rx="22" ry="28" fill="#1a3540"/>
+    <ellipse cx="120" cy="100" rx="14" ry="18" fill="#5fb0c8"/>
+    <ellipse cx="120" cy="100" rx="7"  ry="10" fill="#ffd86b"/>
+    <line x1="0" y1="200" x2="-30" y2="240" stroke="#1c5a6a" stroke-width="3"/>
+  </g>
+
+  <!-- BOTTOM-LEFT : dhol drum -->
+  <g transform="translate(40 800)">
+    <ellipse cx="120" cy="120" rx="120" ry="40" fill="url(#dholBody)"/>
+    <rect x="0" y="80" width="240" height="80" fill="url(#dholBody)"/>
+    <ellipse cx="120" cy="80"  rx="120" ry="40" fill="#fdf6e3" opacity="0.92"/>
+    <ellipse cx="120" cy="80"  rx="120" ry="40" fill="none" stroke="#5a200a" stroke-width="3"/>
+    <!-- rope lacing -->
+    <g stroke="#c9a84c" stroke-width="2" opacity="0.85" fill="none">
+      <line x1="10"  y1="100" x2="30"  y2="140"/>
+      <line x1="50"  y1="90"  x2="70"  y2="150"/>
+      <line x1="90"  y1="86"  x2="110" y2="155"/>
+      <line x1="130" y1="86"  x2="150" y2="155"/>
+      <line x1="170" y1="90"  x2="190" y2="150"/>
+      <line x1="210" y1="100" x2="230" y2="140"/>
+    </g>
+    <!-- sticks -->
+    <line x1="-20" y1="40" x2="40" y2="80" stroke="#7a3a06" stroke-width="6" stroke-linecap="round"/>
+    <line x1="260" y1="40" x2="200" y2="80" stroke="#7a3a06" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <!-- BOTTOM-RIGHT : diya lamp with flame -->
+  <g transform="translate(780 880)">
+    <!-- flame glow -->
+    <ellipse cx="120" cy="0" rx="90" ry="120" fill="url(#diyaFlame)"/>
+    <!-- flame -->
+    <path d="M 120 -90 C 100 -50, 100 -10, 120 0 C 140 -10, 140 -50, 120 -90 Z"
+          fill="#ffb244"/>
+    <path d="M 120 -70 C 110 -40, 110 -10, 120 -5 C 130 -10, 130 -40, 120 -70 Z"
+          fill="#fff5c0"/>
+    <!-- bowl -->
+    <path d="M 30 0 C 30 60, 210 60, 210 0 C 210 -10, 30 -10, 30 0 Z"
+          fill="url(#diyaBowl)"/>
+    <!-- pinch -->
+    <path d="M 30 0 C 10 0, 0 6, 0 14 C 12 12, 26 8, 30 0 Z" fill="#7a3a06"/>
+    <!-- highlights -->
+    <ellipse cx="120" cy="-2" rx="80" ry="6" fill="#fff5c0" opacity="0.6"/>
+  </g>
+
+  <!-- gold confetti dots scattered -->
+  <g fill="#ffe066" opacity="0.85">
+    <circle cx="540" cy="60"  r="3"/>
+    <circle cx="700" cy="180" r="2.5"/>
+    <circle cx="380" cy="220" r="2.5"/>
+    <circle cx="940" cy="540" r="3"/>
+    <circle cx="140" cy="540" r="3"/>
+    <circle cx="540" cy="640" r="2.5"/>
+    <circle cx="660" cy="780" r="3"/>
+    <circle cx="420" cy="760" r="2.5"/>
+    <circle cx="540" cy="1020" r="3"/>
+  </g>
+</svg>
