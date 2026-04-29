@@ -3423,6 +3423,10 @@ document.getElementById('soundToggle').addEventListener('click', function(){
     var response = await sb.functions.invoke(name, { body: body });
     if(response.error){
       var message = response.error.message || ('Failed to call ' + name);
+      var status = response.error.context && response.error.context.status;
+      if(status === 404 || /failed to send a request/i.test(message)){
+        message = 'Upload backend is not deployed yet. Deploy the Supabase gallery functions, then try again.';
+      }
       try {
         if(response.error.context && typeof response.error.context.json === 'function'){
           var details = await response.error.context.json();
