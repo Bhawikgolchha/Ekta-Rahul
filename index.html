@@ -3389,8 +3389,11 @@ document.getElementById('soundToggle').addEventListener('click', function(){
   var activeAlbum = 'all';
   var selectedFiles = [];
   var previewUrls = [];
+  var localPhotoUrls = [];
   var lbIndex = 0;
   var session = readSession();
+  var localMode = Boolean(session && session.local);
+  var localDbPromise = null;
 
   function readSession(){
     try {
@@ -3407,6 +3410,7 @@ document.getElementById('soundToggle').addEventListener('click', function(){
   }
   function saveSession(nextSession){
     session = nextSession;
+    localMode = Boolean(nextSession && nextSession.local);
     sessionStorage.setItem('ekrah_guest_gallery_session', JSON.stringify(nextSession));
   }
   function text(el, value){ if(el) el.textContent = value || ''; }
@@ -3419,12 +3423,19 @@ document.getElementById('soundToggle').addEventListener('click', function(){
   function owned(photo){
     return Boolean(session && photo && photo.uploader_id === session.uploaderId && session.sessionToken);
   }
+  function nameKey(name){
+    return String(name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'guest';
+  }
+  function makeId(){
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(16).slice(2);
+  }
   async function invokeFunction(name, body){
     var response = await sb.functions.invoke(name, { body: body });
     if(response.error){
       var message = response.error.message || ('Failed to call ' + name);
       var status = response.error.context && response.error.context.status;
-      if(status === 404 || /failed to send a request/i.test(message)){
+      var backendUnavailable = status === 404 || /failed to send a request/i.test(message);
+      if(backendUnavailable){
         message = 'Upload backend is not deployed yet. Deploy the Supabase gallery functions, then try again.';
       }
       try {
@@ -3433,7 +3444,9 @@ document.getElementById('soundToggle').addEventListener('click', function(){
           message = details.message || details.error || message;
         }
       } catch(e) {}
-      throw new Error(message);
+      var err = new Error(message);
+      err.backendUnavailable = backendUnavailable;
+      throw err;
     }
     if(response.data && response.data.error){
       throw new Error(response.data.message || response.data.error);
@@ -3444,16 +3457,82 @@ document.getElementById('soundToggle').addEventListener('click', function(){
     previewUrls.forEach(function(url){ URL.revokeObjectURL(url); });
     previewUrls = [];
   }
+  function clearLocalPhotoUrls(){
+    localPhotoUrls.forEach(function(url){ URL.revokeObjectURL(url); });
+    localPhotoUrls = [];
+  }
+  function openLocalDb(){
+    if(localDbPromise) return localDbPromise;
+    localDbPromise = new Promise(function(resolve, reject){
+      var request = indexedDB.open('ekrah_guest_gallery_preview', 1);
+      request.onupgradeneeded = function(){
+        var db = request.result;
+        if(!db.objectStoreNames.contains('photos')){
+          db.createObjectStore('photos', { keyPath: 'id' });
+        }
+      };
+      request.onsuccess = function(){ resolve(request.result); };
+      request.onerror = function(){ reject(request.error); };
+    });
+    return localDbPromise;
+  }
+  async function localStore(method, value){
+    var db = await openLocalDb();
+    return new Promise(function(resolve, reject){
+      var tx = db.transaction('photos', method === 'getAll' ? 'readonly' : 'readwrite');
+      var store = tx.objectStore('photos');
+      var request = method === 'put' ? store.put(value) : method === 'delete' ? store.delete(value) : store.getAll();
+      request.onsuccess = function(){ resolve(request.result); };
+      request.onerror = function(){ reject(request.error); };
+    });
+  }
+  async function loadLocalPhotos(){
+    clearLocalPhotoUrls();
+    var rows = await localStore('getAll');
+    rows.sort(function(a, b){ return String(b.uploaded_at).localeCompare(String(a.uploaded_at)); });
+    allPhotos = rows.map(function(row){
+      var url = URL.createObjectURL(row.blob);
+      localPhotoUrls.push(url);
+      return Object.assign({}, row, { url: url });
+    });
+  }
+  function startLocalSession(name, pin){
+    var key = nameKey(name);
+    var pins = {};
+    try { pins = JSON.parse(localStorage.getItem('ekrah_guest_gallery_preview_pins') || '{}'); } catch(e){}
+    if(pins[key] && pins[key] !== pin){
+      throw new Error('Wrong PIN for this name. Use the same PIN you picked before.');
+    }
+    pins[key] = pin;
+    localStorage.setItem('ekrah_guest_gallery_preview_pins', JSON.stringify(pins));
+    saveSession({
+      sessionToken: 'local-preview',
+      uploaderId: 'local-' + key,
+      uploaderName: name,
+      local: true,
+      expiresAt: Date.now() + (12 * 60 * 60 * 1000)
+    });
+  }
+  function showFileStep(){
+    step1.style.display = 'none';
+    step2.style.display = '';
+    text(status1, '');
+    filterAndRender();
+  }
 
   async function loadPhotos(){
     loading.style.display = '';
     try {
-      var result = await sb.from(TABLE).select('*').order('uploaded_at', { ascending: false });
-      if(result.error) throw result.error;
-      allPhotos = (result.data || []).map(function(row){
-        var publicUrl = sb.storage.from(BUCKET).getPublicUrl(row.file_path).data.publicUrl;
-        return Object.assign({}, row, { url: publicUrl });
-      });
+      if(localMode){
+        await loadLocalPhotos();
+      } else {
+        var result = await sb.from(TABLE).select('*').order('uploaded_at', { ascending: false });
+        if(result.error) throw result.error;
+        allPhotos = (result.data || []).map(function(row){
+          var publicUrl = sb.storage.from(BUCKET).getPublicUrl(row.file_path).data.publicUrl;
+          return Object.assign({}, row, { url: publicUrl });
+        });
+      }
     } catch(e){
       console.error('[Guest gallery] load error:', e);
       allPhotos = [];
@@ -3542,12 +3621,20 @@ document.getElementById('soundToggle').addEventListener('click', function(){
         uploaderName: data.uploader.displayName,
         expiresAt: Date.now() + ((data.expiresIn || 43200) * 1000)
       });
-      step1.style.display = 'none';
-      step2.style.display = '';
-      text(status1, '');
-      filterAndRender();
+      showFileStep();
     } catch(e){
-      text(status1, e.message || 'Could not verify this name and PIN');
+      if(e.backendUnavailable){
+        try {
+          startLocalSession(name, pin);
+          await loadPhotos();
+          showFileStep();
+          text(status2, 'Preview mode: photos stay in this browser until Supabase functions are deployed.');
+        } catch(localError){
+          text(status1, localError.message || 'Could not start preview mode');
+        }
+      } else {
+        text(status1, e.message || 'Could not verify this name and PIN');
+      }
     } finally {
       next.disabled = false;
     }
@@ -3603,6 +3690,31 @@ document.getElementById('soundToggle').addEventListener('click', function(){
     var completed = [];
     var errors = 0;
     try {
+      if(localMode){
+        for(var localIndex = 0; localIndex < selectedFiles.length; localIndex++){
+          var localFile = selectedFiles[localIndex];
+          await localStore('put', {
+            id: makeId(),
+            uploader_id: session.uploaderId,
+            uploader_name: session.uploaderName,
+            event_album: album,
+            file_path: 'local-preview',
+            file_name: localFile.name,
+            content_type: localFile.type,
+            size: localFile.size,
+            uploaded_at: new Date().toISOString(),
+            blob: localFile
+          });
+          progressBar.style.width = (((localIndex + 1) / selectedFiles.length) * 100) + '%';
+          text(status2, 'Saving preview ' + (localIndex + 1) + '/' + selectedFiles.length + '...');
+        }
+        text(status2, selectedFiles.length + ' photo(s) added in preview mode');
+        selectedFiles = [];
+        revokePreviews();
+        previews.innerHTML = '';
+        setTimeout(function(){ closeModal(); loadPhotos(); }, 900);
+        return;
+      }
       var signed = await invokeFunction('gallery-sign-upload', {
         sessionToken: session.sessionToken,
         files: selectedFiles.map(function(file){
@@ -3712,10 +3824,14 @@ document.getElementById('soundToggle').addEventListener('click', function(){
   });
   async function deletePhoto(photo){
     try {
-      await invokeFunction('gallery-delete', {
-        sessionToken: session.sessionToken,
-        photoId: photo.id
-      });
+      if(localMode && photo.file_path === 'local-preview'){
+        await localStore('delete', photo.id);
+      } else {
+        await invokeFunction('gallery-delete', {
+          sessionToken: session.sessionToken,
+          photoId: photo.id
+        });
+      }
       closeLightbox();
       loadPhotos();
     } catch(e){
