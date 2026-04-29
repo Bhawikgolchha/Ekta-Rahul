@@ -44,6 +44,14 @@ The repo now ships **two self-contained sites side-by-side**, both standalone HT
   - Parent names: Ekta — D/o Manoj Kumar Bothra and Vijaya Devi Bothra · Rahul — S/o Surendraji Surana and Shobha Devi Surana
   - Six events with sub-venues: Mayra (3rd Floor Hall) · Tamil Carnival (Pool Side Lawn) · Musical Night (Open Terrace) · Sangeet (Main Lawn) · Milni & Phera (Pavilion) · Reception (Main Lawn). **No Mehndi event. No Champagne in Reception copy.**
 
+## Photo upload (YD Studio / Kamero)
+
+- **Upload URL:** `https://yd-studio-india.kamero.ai/ekrahforever`
+- **QR asset:** `images/upload-qr.png` — YD Studio-branded QR code linking to the same URL.
+- **In-page section:** `#upload` (between `#timeline` and `#venue`) — shows QR + "Tap to upload" CTA button.
+- **Popup:** `#uploadPopup` — fires once per session after a 30-second delay. Auto-closes after a 10-second countdown. Dismissible via ✕ button, backdrop click, or `Esc` key. Gated by `sessionStorage` key `uploadPopupShown`.
+- **CSS classes:** `.upload-popup`, `.upload-popup-backdrop`, `.upload-popup-card`, `.upload-popup-close`, `.upload-popup-auto`, `.upload-qr` (reused inside card), `.cam-btn.primary`.
+
 ## Commit style
 
 Recent history uses short imperative subjects with optional scope-y prefixes (`Round 2: …`, `Launch …`, `Replace …`). Keep that tone — single-line subject, no Conventional Commits prefix.
