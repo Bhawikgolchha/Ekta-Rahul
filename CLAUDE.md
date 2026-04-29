@@ -18,20 +18,31 @@ python -m http.server 8765
 
 ## Architecture
 
-Everything lives in `index.html` (~2300 lines, single source of truth). It is organized top-to-bottom as:
+The repo now ships **two self-contained sites side-by-side**, both standalone HTML — no build, no framework, no shared CSS/JS:
 
-1. **`<style>` block** (lines ~36–1284) — all CSS inline. Uses CSS custom properties for the palette and a few keyframe animations (`knockBob`, etc.). No external CSS file.
-2. **Intro overlay** (`#intro`, ~1288–1374) — the "Padharo Sa" doors-opening sequence. Body starts with class `intro-locked`; the IIFE at the bottom of the page removes it after the doors animate open.
-3. **Page sections**, each marked by a banner comment and an `id`, in this order: `#hero`, `#story`, `#timeline`, `#dress`, `#venue`, `#faq`, then `<footer>`.
-4. **Inline `<script>` for the intro** (~1771–1866) — vanilla JS IIFE that builds the door studs, marigold garland, wires the "Knock to Enter" button, handles Esc/Enter/click-to-skip, and on completion removes `intro-locked` and dispatches a `resize` event so ScrollTrigger recalculates.
-5. **GSAP + ScrollTrigger** loaded from cdnjs as deferred scripts, then a second inline script (~1871–2298) that polls `window.gsap` and registers all scroll-driven animations. Anything scroll-reactive belongs in this block.
+- **`index.html` — v2 "Shaadi Card, Reborn"** (the live site). Paper-and-marigold Indian luxe, Devanagari hero typography, ink + cream palette. Vanilla JS only (no GSAP). 5-diya tap-to-light intro, per-event live countdowns, blessings wall (localStorage key `ekrah_bless`), photo gallery, magnetic dock, pull-to-bless petal shower, shake-to-shower (DeviceMotion), long-press wishes, ambient shehnai toggle (Web Audio API), photo doodle canvas. Camera-modal photo filters (5 overlay SVGs) ported from v1 sit inside `#filters`.
+- **`index-v1.html` — original dark-purple GSAP build.** Frozen as a fallback; reachable at `/index-v1.html` on Vercel. Self-contained — edit only if reviving.
 
-### Things to know before editing
+### v2 layout (index.html)
 
-- **Lots of base64-inlined images.** The hero preload `<link>` and the footer logo `<img>` use `data:image/jpeg;base64,…` blobs that make the file huge (the file exceeds the Read tool's token limit — read with `offset`/`limit` or grep for the section first). When making edits, anchor on nearby section comment banners or `id="…"` attributes rather than scrolling through line numbers.
-- **Edit order matters for the intro.** If you touch the intro DOM (`#intro`, `#doors`, `#intro-stage`), keep the IDs the script queries by name in sync. The script also relies on `body.intro-locked` to disable scroll until doors open.
-- **GSAP is optional-by-runtime.** The second script polls until GSAP loads, so the page must work visually without it. Don't put critical layout in scroll triggers — use them for enhancement only.
-- **Real links to keep intact**: Instagram (`@ekrah_forever`) and WhatsApp (`+91 97908 91316`) in the footer. Recent commits show socials were intentionally swapped from placeholders to real handles.
+1. **External fonts** — single Google Fonts call up top loads Fraunces, Instrument Sans, Instrument Serif, and Tiro Devanagari Hindi. Required: don't strip the preconnect lines.
+2. **`<style>` block** (~lines 14–1330) — CSS custom properties (`--ink`, `--paper`, `--marigold`, `--gold-deep`, etc.) and per-event tone overrides via `--ev-tone`. Camera-modal CSS at the very end of this block.
+3. **Intro overlay** (`.intro`, near top of `<body>`) — 5 diyas; tapping each lights it; all-lit OR 30s timeout removes `body.locked` and reveals the page.
+4. **Sections in order:** `.topbar`, `.hero` (ek × राहुल), `.tagline`, `.events-cd` (per-event countdown rail), `.chapters` (one per ceremony, color-toned, with doodle canvas), `.venue`, `.party` (parents' names), `.blessings`, `.gallery`, `.filters`, `.closing`, then the magnetic `.dock`.
+5. **Inline `<script>` block** (~lines 1969–2750) — single big IIFE chain. Order matters: diya intro IIFE → reveal observer → magnetic dock → doodle → blessings persistence → countdown timers → pull-to-bless → shake → shehnai oscillator → closing-petal observer → camera-modal filters IIFE (last).
+
+### Things to know before editing v2
+
+- **Image paths live in `images/`.** v2's source from Claude Design used sibling paths (`./hero-couple.png`); we rewrote them to `images/...`. New images go there.
+- **Filter overlays live in `images/filters/`.** Five SVGs: marigold, mehndi, ekrah-banner, padharo, dhol-diya. The same files are used both as `<img>` thumbnails on the cards and composited onto the camera canvas.
+- **Camera modal expects `body.locked`** to disable scroll while it's open (same class the diya intro uses; reuse, don't redefine).
+- **No GSAP, no jQuery, no CDN libs other than Google Fonts.** If you need an animation, use Web Animations (`element.animate()`), CSS transitions, or IntersectionObserver.
+- **Real contact data to keep intact:**
+  - Instagram: `https://www.instagram.com/ekrah_forever?igsh=MWdnbzZ6ZWZrMjFmdw==`
+  - WhatsApp / RSVP: `+91 86514 73405` → `https://wa.me/918651473405`
+  - Venue: Ponneri Gymkhana Club, 76 Peruncheri, Ponneri – 601204, Tamil Nadu
+  - Parent names: Ekta — D/o Manoj Kumar Bothra and Vijaya Devi Bothra · Rahul — S/o Surendraji Surana and Shobha Devi Surana
+  - Six events with sub-venues: Mayra (3rd Floor Hall) · Tamil Carnival (Pool Side Lawn) · Musical Night (Open Terrace) · Sangeet (Main Lawn) · Milni & Phera (Pavilion) · Reception (Main Lawn). **No Mehndi event. No Champagne in Reception copy.**
 
 ## Commit style
 
