@@ -5,3 +5,5 @@ config.js
 *.env
 .supabase/
 supabase/.temp/
+
+.vercel
