@@ -3335,9 +3335,9 @@ document.getElementById('soundToggle').addEventListener('click', function(){
 (function guestGallery(){
   'use strict';
 
-  var hasConfig = typeof SUPABASE_URL !== 'undefined' &&
-    typeof SUPABASE_ANON !== 'undefined' &&
-    window.supabase;
+  var gallerySupabaseUrl = typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : 'https://nnfejlujljbkwurqfprg.supabase.co';
+  var gallerySupabaseAnon = typeof SUPABASE_ANON !== 'undefined' ? SUPABASE_ANON : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uZmVqbHVqbGpia3d1cnFmcHJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwMzM0NDUsImV4cCI6MjA5MDYwOTQ0NX0.S25lydxAWxuRDr8TcIOL43QusPzUUQIwCK2krgOvd5Q';
+  var hasConfig = gallerySupabaseUrl && gallerySupabaseAnon && window.supabase;
   var BUCKET = 'wedding-photos';
   var TABLE = 'photo_uploads';
   var MAX_FILES = 50;
@@ -3383,7 +3383,7 @@ document.getElementById('soundToggle').addEventListener('click', function(){
     return;
   }
 
-  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  var sb = window.supabase.createClient(gallerySupabaseUrl, gallerySupabaseAnon);
   var allPhotos = [];
   var filtered = [];
   var activeAlbum = 'all';
